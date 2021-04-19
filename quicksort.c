@@ -3,6 +3,8 @@
 //
 
 #include "quicksort.h"
+#include "stdlib.h"
+
 
 void swap(int i, int j, int arr[]) {
     int h = arr[i];
@@ -13,7 +15,7 @@ void swap(int i, int j, int arr[]) {
 int partition(int length, int arr[]) {
     int left = 0;
     int right = length;
-    int pivot = arr[0];
+    int pivot = arr[rand()%length];
     while (left < right) {
         while ((left < right) && (arr[left] <= pivot)) {
             left++;

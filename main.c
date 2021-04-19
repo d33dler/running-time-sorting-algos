@@ -12,16 +12,17 @@
 #include <string.h>
 #include <time.h>
 #include <unistd.h>
+#include "mt19937ar.h"
+
 #define BILLION  1000000000.0
 #define CPU 1
 #if CPU
 #endif
 
 
-void populateArr(int arrsort[],int len) {
-    srand(clock());
+void populateArr(int arrsort[], int len) {
     for (int i = 0; i < len; i++) {
-        arrsort[i] = rand() ;
+        arrsort[i] = genrand_int32() ;
     }
 }
 
@@ -60,19 +61,31 @@ void cloneArr(int arr[], int clone[], int len)  {
     }
 }
 
-int main(int argc, char *argv[]) {
-    int arrn[8] = {10000,20000,30000,90000,120000,200000,250000,500000};
+
+int main() {
+    int arrn[7] = {10000,20000,30000,90000,120000,220000,500000};
+    unsigned int randval;
+    FILE *f;
+    f = fopen("/dev/random", "r");
+    fread(&randval, sizeof(randval), 1, f);
+    fclose(f);
+    init_genrand(randval);
 
     for (int i = 0; i < 7; i++) {
         int arrsort[arrn[i]];
         int clone1[arrn[i]];
         int clone2[arrn[i]];
         populateArr(arrsort, arrn[i]);
+      //  for (int q = 0; q < arrn[i]; q++) {
+      //      printf("%d  ", arrsort[q]);
+      //  }
+        printf(" \n");
         cloneArr(arrsort, clone1, arrn[i]);
         cloneArr(arrsort, clone2, arrn[i]);
-        //runIS(arrsort, arrn[i]);
-        runMS(clone1, arrn[i]);
         runQS(clone2, arrn[i]);
+        runMS(clone1, arrn[i]);
+
+        // runIS(arrsort, arrn[i]);
     }
     return 0;
 }
